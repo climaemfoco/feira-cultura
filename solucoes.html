@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+
+<script>
+(function () {
+  try {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(reg){ reg.unregister(); });
+      });
+    }
+    if ("caches" in window) {
+      caches.keys().then(function(keys){
+        keys.forEach(function(key){ caches.delete(key); });
+      });
+    }
+  } catch(e) {}
+})();
+</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b3b29">
+<title>Soluções | Clima em Foco</title>
+<link rel="stylesheet" href="style.css?v=31">
+</head>
+<body>
+<header>
+<div class="nav">
+  <a class="brand" href="index.html"><span class="logo">🌿</span><span>Clima em Foco<small>Grupo 3 • Turma 8º E</small></span></a>
+  <nav class="links"><a class="" href="index.html">Início</a><a class="" href="entenda.html">Entenda</a><a class="" href="planeta.html">Planeta</a><a class="" href="impactos.html">Impactos</a><a class="active" href="solucoes.html">Soluções</a><a class="cta" href="quiz.html">Quiz</a></nav>
+  <button class="theme-toggle" type="button" aria-label="Alternar tema">🌙</button>
+</div>
+</header><div class="progress-shell" aria-hidden="true"><span style="width:71.4%"></span></div>
+
+<main>
+<section class="wrap">
+  <div class="head">
+    <div class="kicker">Soluções</div>
+    <h1 style="font-size:clamp(3rem,6vw,5.2rem)">Agir em duas frentes: reduzir causas e reduzir danos.</h1>
+    <p class="lead">Mitigação e adaptação são complementares. Precisamos diminuir as emissões que aquecem o planeta e, ao mesmo tempo, preparar pessoas e cidades para impactos que já estão acontecendo.</p>
+  </div>
+
+  <div class="feature">
+    <div class="dark reveal">
+      <div class="kicker" style="color:#a8e1c1">Mitigação</div>
+      <h2 style="font-size:2.4rem">Evitar mais aquecimento.</h2>
+      <p>Mitigar significa reduzir emissões de gases de efeito estufa ou aumentar a remoção de carbono da atmosfera.</p>
+      <p><b>Exemplos:</b> eficiência energética, fontes de menor emissão, transporte coletivo, proteção de florestas, redução de desperdícios e tecnologias mais limpas.</p>
+    </div>
+    <div class="card reveal">
+      <div class="kicker">Adaptação</div>
+      <h2 style="font-size:2.4rem">Conviver com os riscos de forma mais segura.</h2>
+      <p>Adaptar significa diminuir a vulnerabilidade diante de calor, enchentes, secas, elevação do nível do mar e outros impactos.</p>
+      <p><b>Exemplos:</b> alertas, arborização urbana, drenagem, gestão da água, infraestrutura resiliente e proteção de ecossistemas.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="head"><div class="kicker">Na prática</div><h2>Não existe uma solução única.</h2><p>As respostas mais eficazes combinam ciência, políticas públicas, tecnologia, planejamento urbano, conservação ambiental e participação da sociedade.</p></div>
+  <div class="cards">
+    <div class="card reveal"><div class="icon">⚡</div><h3>Energia</h3><p>Usar energia de forma mais eficiente e ampliar fontes de menor emissão.</p></div>
+    <div class="card reveal"><div class="icon">🚌</div><h3>Mobilidade</h3><p>Planejar cidades que facilitem transporte coletivo, caminhada e bicicleta.</p></div>
+    <div class="card reveal"><div class="icon">🌳</div><h3>Natureza</h3><p>Conservar e recuperar ecossistemas que armazenam carbono e ajudam na adaptação.</p></div>
+    <div class="card reveal"><div class="icon">🏙️</div><h3>Cidades</h3><p>Reduzir ilhas de calor, melhorar drenagem e preparar serviços para eventos extremos.</p></div>
+    <div class="card reveal"><div class="icon">🔬</div><h3>Ciência</h3><p>Monitoramento e pesquisa ajudam a entender riscos e escolher soluções mais eficazes.</p></div>
+    <div class="card reveal"><div class="icon">📚</div><h3>Educação</h3><p>Informação de qualidade ajuda pessoas a reconhecer problemas, evitar desinformação e participar das decisões.</p></div>
+  </div>
+
+  <div class="key-message reveal">
+    <b>Responsabilidade individual importa, mas não resolve tudo sozinha.</b>
+    <p>Grandes reduções de emissões dependem também de decisões coletivas, infraestrutura, empresas e políticas públicas.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="head reveal">
+    <div class="kicker">Experimente</div>
+    <h2>E se o aquecimento aumentar?</h2>
+    <p>Use o controle para comparar, de forma educativa, como os riscos tendem a crescer à medida que o aquecimento global aumenta.</p>
+  </div>
+  <div class="warming-lab reveal">
+    <div class="warming-value"><span id="warmValue">1,5</span><small>°C</small></div>
+    <input id="warmRange" type="range" min="15" max="40" value="15" step="5" aria-label="Nível de aquecimento global">
+    <div class="warming-scale"><span>+1,5 °C</span><span>+2 °C</span><span>+3 °C</span><span>+4 °C</span></div>
+    <div class="risk-meter"><span id="riskBar"></span></div>
+    <h3 id="riskTitle">Riscos importantes</h3>
+    <p id="riskText">Mesmo em níveis menores de aquecimento existem impactos relevantes. Cada fração de grau evitada reduz riscos.</p>
+    <small class="muted">Visualização educativa baseada no princípio estabelecido pelo IPCC de que riscos e impactos aumentam com níveis adicionais de aquecimento. Não é uma previsão local.</small>
+  </div>
+</section>
+<script>
+(() => {
+ const r=document.getElementById("warmRange"),v=document.getElementById("warmValue"),
+       b=document.getElementById("riskBar"),title=document.getElementById("riskTitle"),text=document.getElementById("riskText");
+ const levels={
+  15:["1,5","Riscos importantes","Mesmo em níveis menores de aquecimento existem impactos relevantes. Cada fração de grau evitada reduz riscos."],
+  20:["2,0","Riscos maiores","Ondas de calor e outros extremos tendem a se tornar mais intensos ou frequentes, aumentando a necessidade de mitigação e adaptação."],
+  25:["2,5","Riscos elevados","Mais aquecimento amplia a exposição de pessoas e ecossistemas e torna alguns impactos mais difíceis de administrar."],
+  30:["3,0","Riscos muito elevados","Os riscos climáticos crescem em várias regiões e sistemas naturais, com maiores desafios de adaptação."],
+  35:["3,5","Riscos severos","Aumentam as chances de impactos graves e perdas, especialmente onde há alta vulnerabilidade."],
+  40:["4,0","Riscos extremos","Um mundo muito mais quente traz riscos amplos e profundos. Limitar o aquecimento reduz esses perigos."]
+ };
+ function update(){
+   const x=levels[r.value];v.textContent=x[0];title.textContent=x[1];text.textContent=x[2];
+   b.style.width=((r.value-10)/30*100)+"%";
+ }
+ r.oninput=update;update();
+})();
+</script>
+
+
+
+<section class="wrap v31-climate-section">
+  <div class="head reveal">
+    <div class="kicker">Cenário de aquecimento</div>
+    <h2>Como os riscos mudam com o aquecimento?</h2>
+    <p>Arraste a barra para comparar, de forma educativa, como alguns riscos climáticos tendem a aumentar em um mundo mais quente.</p>
+  </div>
+
+  <div class="warming-explorer reveal">
+    <div class="warming-top">
+      <div>
+        <span class="warming-label">Aquecimento global</span>
+        <strong id="warmingValue">+1,5 °C</strong>
+        <small>em relação ao período pré-industrial</small>
+      </div>
+      <div class="warming-risk" id="warmingRisk"><i></i><span>Riscos elevados</span></div>
+    </div>
+
+    <div class="warming-slider-wrap">
+      <input id="warmingRangeV31" type="range" min="15" max="40" value="15" step="1" aria-label="Nível de aquecimento global">
+      <div class="warming-scale"><span>+1,5 °C</span><span>+2 °C</span><span>+3 °C</span><span>+4 °C</span></div>
+    </div>
+
+    <div class="warming-visual" id="warmingVisual">
+      <div class="warming-glow"></div>
+      <div class="warming-icon">🌎</div>
+      <div class="warming-meter"><span id="warmingMeter"></span></div>
+    </div>
+
+    <div class="warming-cards">
+      <article>
+        <span>🌡️</span><div><b>Calor extremo</b><p id="warmingHeat">Ondas de calor já representam um risco importante e exigem adaptação.</p></div>
+      </article>
+      <article>
+        <span>🌧️</span><div><b>Eventos extremos</b><p id="warmingRain">Preparação, alertas e infraestrutura ajudam a reduzir impactos.</p></div>
+      </article>
+      <article>
+        <span>🌿</span><div><b>Ecossistemas</b><p id="warmingNature">Muitos ecossistemas ficam mais pressionados conforme o aquecimento aumenta.</p></div>
+      </article>
+    </div>
+    <p class="warming-note">Este controle é uma visualização educativa de tendências de risco, não uma previsão para uma cidade específica.</p>
+  </div>
+</section>
+<script>
+(() => {
+ const range=document.getElementById("warmingRangeV31");
+ if(!range) return;
+ const value=document.getElementById("warmingValue");
+ const risk=document.getElementById("warmingRisk");
+ const meter=document.getElementById("warmingMeter");
+ const visual=document.getElementById("warmingVisual");
+ const heat=document.getElementById("warmingHeat");
+ const rain=document.getElementById("warmingRain");
+ const nature=document.getElementById("warmingNature");
+
+ function update(){
+   const n=Number(range.value)/10;
+   value.textContent="+"+n.toFixed(1).replace(".",",")+" °C";
+   const pct=(Number(range.value)-15)/(40-15)*100;
+   meter.style.width=(18+pct*.82)+"%";
+   visual.style.setProperty("--heat",pct+"%");
+
+   let label,level,h,r,na;
+   if(n<2){
+     label="Riscos elevados"; level="low";
+     h="Ondas de calor já representam um risco importante e exigem adaptação.";
+     r="Eventos intensos podem causar grandes impactos onde há maior exposição e vulnerabilidade.";
+     na="Ecossistemas sensíveis já enfrentam pressão e perdas podem aumentar.";
+   } else if(n<3){
+     label="Riscos maiores"; level="medium";
+     h="A frequência e a intensidade de extremos de calor tendem a aumentar.";
+     r="Os desafios ligados a extremos de chuva, secas e outros eventos aumentam em muitas regiões.";
+     na="Crescem os riscos de mudanças e perdas em diferentes ecossistemas.";
+   } else {
+     label="Riscos muito altos"; level="high";
+     h="Calor extremo se torna um desafio ainda mais sério para pessoas e cidades.";
+     r="A adaptação a eventos extremos fica mais difícil e os impactos potenciais aumentam.";
+     na="Aumentam fortemente as pressões sobre biodiversidade e funcionamento dos ecossistemas.";
+   }
+   risk.dataset.level=level; risk.querySelector("span").textContent=label;
+   heat.textContent=h; rain.textContent=r; nature.textContent=na;
+ }
+ range.addEventListener("input",update); update();
+})();
+</script>
+<section class="wrap v29-section">
+ <div class="head reveal"><div class="kicker">Você decide</div><h2>O que você faria?</h2><p>Escolha uma situação e veja qual ação ajuda a cidade a se preparar.</p></div>
+ <div class="decision-game reveal" id="decisionGame">
+   <div class="decision-icon">🏙️☀️</div>
+   <h3>Sua cidade está enfrentando ondas de calor. Qual medida ajuda mais?</h3>
+   <div class="decision-options">
+     <button data-good="0">Retirar árvores para abrir mais espaço</button>
+     <button data-good="1">Ampliar arborização, sombra e acesso a locais frescos</button>
+     <button data-good="0">Cobrir mais áreas com asfalto escuro</button>
+   </div>
+   <p class="decision-feedback" id="decisionFeedback">Escolha uma resposta.</p>
+ </div>
+</section>
+<script>
+(() => {
+ const info={
+  15:["Ondas de calor já exigem preparação.","Drenagem e alertas ajudam a reduzir riscos.","Arborização, sombra e planejamento urbano são importantes."],
+  20:["O risco associado ao calor aumenta.","Chuvas intensas podem ampliar problemas onde há alta vulnerabilidade.","Mais infraestrutura resiliente e áreas verdes ajudam na adaptação."],
+  30:["Calor extremo pode trazer desafios muito maiores.","Eventos extremos podem gerar impactos mais graves em áreas vulneráveis.","A adaptação se torna mais difícil e reduzir emissões continua essencial."]
+ };
+ document.querySelectorAll(".future-temp").forEach(b=>b.onclick=()=>{
+   document.querySelectorAll(".future-temp").forEach(x=>x.classList.remove("active")); b.classList.add("active");
+   const a=info[b.dataset.temp];
+   futureHeat.textContent=a[0]; futureRain.textContent=a[1]; futureAdapt.textContent=a[2];
+   futureScene.dataset.temp=b.dataset.temp;
+ });
+ document.querySelectorAll(".decision-options button").forEach(b=>b.onclick=()=>{
+   const ok=b.dataset.good==="1";
+   decisionFeedback.textContent=ok?"Boa escolha! Árvores, sombra e planejamento podem reduzir a exposição ao calor.":"Essa opção pode aumentar a exposição ao calor. Tente outra alternativa.";
+   decisionFeedback.className="decision-feedback "+(ok?"good":"bad");
+ });
+})();
+</script>
+
+</main>
+
+<nav class="page-switch" aria-label="Navegação entre páginas"><a class="back" href="impactos.html">← Impactos</a><a class="forward" href="quiz.html">Quiz →</a></nav>
+<footer>
+<div class="wrap footer">
+  <div><strong>Feira de Cultura — Colégio Bernoulli</strong><div class="muted">Mudanças Climáticas</div></div>
+  <div class="badge"><strong>Grupo 3 • Turma 8º E</strong><br><span>Colégio Bernoulli</span></div>
+</div>
+<div class="wrap bottom">Grupo 3 • Turma 8º E • Feira de Cultura • Colégio Bernoulli</div>
+<div class="site-version">V31</div>
+</footer>
+<script src="script.js?v=31"></script>
+</body>
+</html>

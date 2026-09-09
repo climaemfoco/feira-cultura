@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+
+<script>
+(function () {
+  try {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(reg){ reg.unregister(); });
+      });
+    }
+    if ("caches" in window) {
+      caches.keys().then(function(keys){
+        keys.forEach(function(key){ caches.delete(key); });
+      });
+    }
+  } catch(e) {}
+})();
+</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b3b29">
+<title>Entenda | Clima em Foco</title>
+<link rel="stylesheet" href="style.css?v=31">
+</head>
+<body>
+<header>
+<div class="nav">
+  <a class="brand" href="index.html"><span class="logo">🌿</span><span>Clima em Foco<small>Grupo 3 • Turma 8º E</small></span></a>
+  <nav class="links"><a class="" href="index.html">Início</a><a class="active" href="entenda.html">Entenda</a><a class="" href="planeta.html">Planeta</a><a class="" href="impactos.html">Impactos</a><a class="" href="solucoes.html">Soluções</a><a class="cta" href="quiz.html">Quiz</a></nav>
+  <button class="theme-toggle" type="button" aria-label="Alternar tema">🌙</button>
+</div>
+</header><div class="progress-shell" aria-hidden="true"><span style="width:28.6%"></span></div>
+
+<main>
+<section class="wrap">
+  <div class="head">
+    <div class="kicker">Entenda</div>
+    <h1 style="font-size:clamp(3rem,6vw,5.2rem)">Por que a Terra está aquecendo?</h1>
+    <p class="lead">O efeito estufa é natural e mantém a Terra habitável. O problema começa quando atividades humanas aumentam a concentração de gases que retêm calor, intensificando esse efeito e elevando a temperatura média do planeta.</p>
+  </div>
+
+  <div class="climate-flow reveal">
+    <div class="flow-step"><span>1</span><div><b>Energia do Sol</b><p>A luz solar atravessa a atmosfera e aquece a superfície terrestre.</p></div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span>2</span><div><b>Calor volta para o espaço</b><p>A superfície aquecida libera energia em forma de radiação infravermelha.</p></div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><span>3</span><div><b>Gases retêm parte do calor</b><p>CO₂, CH₄ e N₂O absorvem e reemitem parte dessa energia.</p></div></div>
+  </div>
+
+  <div class="feature">
+    <div class="dark reveal">
+      <div class="kicker" style="color:#a8e1c1">Efeito estufa</div>
+      <h2 style="font-size:2.35rem">Natural é diferente de intensificado.</h2>
+      <p>Sem o efeito estufa natural, a Terra seria fria demais para a vida como conhecemos. O aquecimento atual ocorre porque a concentração de gases de efeito estufa aumentou, reforçando esse mecanismo.</p>
+      <p><b>Em resumo:</b> mais gases de efeito estufa → mais calor retido no sistema climático → aumento da temperatura média global.</p>
+    </div>
+
+    <div class="list">
+      <div class="row reveal"><span>⛽</span><div><b>Combustíveis fósseis</b><p>Queimar carvão, petróleo e gás natural libera grandes quantidades de CO₂.</p></div></div>
+      <div class="row reveal"><span>🌳</span><div><b>Desmatamento</b><p>Libera carbono armazenado e reduz a capacidade dos ecossistemas de remover CO₂ da atmosfera.</p></div></div>
+      <div class="row reveal"><span>🐄</span><div><b>Agropecuária</b><p>Algumas atividades emitem metano e óxido nitroso, gases de efeito estufa importantes.</p></div></div>
+      <div class="row reveal"><span>🏭</span><div><b>Indústria</b><p>Processos industriais e produção de materiais também podem gerar emissões.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="head">
+    <div class="kicker">Não confunda</div>
+    <h2>Aquecimento global e mudanças climáticas não são exatamente a mesma coisa.</h2>
+  </div>
+  <div class="cards">
+    <div class="card reveal"><div class="icon">🔥</div><h3>Aquecimento global</h3><p>É o aumento de longo prazo da temperatura média da superfície da Terra.</p></div>
+    <div class="card reveal"><div class="icon">🌍</div><h3>Mudanças climáticas</h3><p>É um termo mais amplo: inclui o aquecimento e outras mudanças duradouras em chuvas, oceanos, gelo, extremos e ecossistemas.</p></div>
+    <div class="card reveal"><div class="icon">🌦️</div><h3>Tempo</h3><p>É o estado da atmosfera em curto prazo, como a chuva de hoje ou a temperatura de amanhã.</p></div>
+    <div class="card reveal"><div class="icon">📈</div><h3>Clima</h3><p>É o conjunto de padrões e tendências observados por períodos longos em uma região ou no planeta.</p></div>
+  </div>
+
+  <div class="key-message reveal">
+    <b>Uma onda de frio não “prova” que o aquecimento global acabou.</b>
+    <p>Eventos de tempo variam de um dia para outro. A mudança climática é identificada por tendências de longo prazo e por alterações no sistema climático como um todo.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="fact-strip reveal">
+    <div><span class="kicker">Você sabia?</span><h3 id="factTitle">Clima não é a mesma coisa que tempo.</h3><p id="factText">O tempo muda em horas ou dias. O clima é observado por padrões de longo prazo.</p></div>
+    <button class="btn secondary" id="nextFact" type="button">Outro fato →</button>
+  </div>
+</section>
+<script>
+(() => {
+ const facts=[
+  ["Clima não é a mesma coisa que tempo.","O tempo muda em horas ou dias. O clima é observado por padrões de longo prazo."],
+  ["O efeito estufa não é o vilão por si só.","Ele é natural e essencial. O problema é sua intensificação pelo excesso de gases de efeito estufa."],
+  ["Cada fração de grau importa.","Limitar o aquecimento reduz riscos para pessoas, ecossistemas e infraestrutura."],
+  ["Mitigação e adaptação trabalham juntas.","Uma atua nas causas; a outra reduz vulnerabilidades e danos."]
+ ];
+ let i=0;
+ document.getElementById("nextFact").onclick=()=>{
+   i=(i+1)%facts.length;
+   document.getElementById("factTitle").textContent=facts[i][0];
+   document.getElementById("factText").textContent=facts[i][1];
+ };
+})();
+</script>
+
+
+<section class="wrap v29-section">
+ <div class="head reveal"><div class="kicker">Compare</div><h2>Antes × Depois</h2><p>Arraste a barra e compare duas formas de ocupar uma cidade.</p></div>
+ <div class="compare reveal" id="compare">
+   <div class="compare-side compare-bad"><div>🏢 🏢 🏢<br>🛣️ 🚗 🛣️<br>🏢 🏢 🏢</div><b>Mais concreto e pouca sombra</b></div>
+   <div class="compare-side compare-good" id="compareGood"><div>🌳 🏡 🌳<br>🚲 🌿 🚶<br>🌳 🏫 🌳</div><b>Mais árvores e espaços verdes</b></div>
+   <input id="compareRange" type="range" min="5" max="95" value="50" aria-label="Comparar os dois cenários">
+   <div class="compare-handle" id="compareHandle">↔</div>
+ </div>
+ <p class="mini-note">A ilustração é educativa: cidades reais são mais complexas, mas arborização, materiais, drenagem e desenho urbano influenciam conforto térmico e vulnerabilidade.</p>
+</section>
+
+<section class="wrap v29-section">
+ <div class="head reveal"><div class="kicker">Visualize</div><h2>CO₂ é invisível. O acúmulo não é.</h2><p>A animação representa, de forma simbólica, o aumento da concentração de gases de efeito estufa.</p></div>
+ <div class="co2-demo reveal">
+   <div class="co2-atmosphere" id="co2Atmosphere"><div class="mini-earth">🌎</div></div>
+   <div class="co2-copy"><strong id="co2Count">0</strong><span>partículas simbólicas na demonstração</span><button class="btn" id="addCo2">Adicionar CO₂</button><button class="btn secondary" id="resetCo2">Reiniciar</button></div>
+ </div>
+ <p class="mini-note">As bolinhas não representam moléculas em escala real. Elas servem apenas para tornar visível a ideia de acúmulo.</p>
+</section>
+<script>
+(() => {
+ const r=document.getElementById("compareRange"),g=document.getElementById("compareGood"),h=document.getElementById("compareHandle");
+ function cmp(){g.style.clipPath=`inset(0 ${100-r.value}% 0 0)`;h.style.left=r.value+"%"} r.oninput=cmp;cmp();
+ let n=0; const atm=document.getElementById("co2Atmosphere"),count=document.getElementById("co2Count");
+ function add(){
+   for(let i=0;i<5;i++){const d=document.createElement("i");d.className="co2-dot";d.textContent="CO₂";d.style.left=(8+Math.random()*84)+"%";d.style.top=(8+Math.random()*76)+"%";atm.appendChild(d);n++}
+   count.textContent=n;
+ }
+ addCo2.onclick=add; resetCo2.onclick=()=>{atm.querySelectorAll(".co2-dot").forEach(x=>x.remove());n=0;count.textContent=0};
+})();
+</script>
+
+</main>
+
+<nav class="page-switch" aria-label="Navegação entre páginas"><a class="back" href="index.html">← Início</a><a class="forward" href="planeta.html">Planeta →</a></nav>
+<footer>
+<div class="wrap footer">
+  <div><strong>Feira de Cultura — Colégio Bernoulli</strong><div class="muted">Mudanças Climáticas</div></div>
+  <div class="badge"><strong>Grupo 3 • Turma 8º E</strong><br><span>Colégio Bernoulli</span></div>
+</div>
+<div class="wrap bottom">Grupo 3 • Turma 8º E • Feira de Cultura • Colégio Bernoulli</div>
+<div class="site-version">V31</div>
+</footer>
+<script src="script.js?v=31"></script>
+</body>
+</html>

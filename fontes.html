@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+
+<script>
+(function () {
+  try {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(reg){ reg.unregister(); });
+      });
+    }
+    if ("caches" in window) {
+      caches.keys().then(function(keys){
+        keys.forEach(function(key){ caches.delete(key); });
+      });
+    }
+  } catch(e) {}
+})();
+</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b3b29">
+<title>Fontes | Clima em Foco</title>
+<link rel="stylesheet" href="style.css?v=31">
+</head>
+<body>
+<header>
+<div class="nav">
+  <a class="brand" href="index.html"><span class="logo">🌿</span><span>Clima em Foco<small>Grupo 3 • Turma 8º E</small></span></a>
+  <nav class="links"><a class="" href="index.html">Início</a><a class="" href="entenda.html">Entenda</a><a class="" href="planeta.html">Planeta</a><a class="" href="impactos.html">Impactos</a><a class="" href="solucoes.html">Soluções</a><a class="cta" href="quiz.html">Quiz</a></nav>
+  <button class="theme-toggle" type="button" aria-label="Alternar tema">🌙</button>
+</div>
+</header><div class="progress-shell" aria-hidden="true"><span style="width:100.0%"></span></div>
+
+<main>
+<section class="wrap">
+  <div class="head">
+    <div class="kicker">Fontes</div>
+    <h1 style="font-size:clamp(3rem,6vw,5.2rem)">Informação boa precisa de fonte boa.</h1>
+    <p class="lead">O conteúdo foi construído com base em instituições científicas e órgãos públicos que pesquisam, monitoram e explicam as mudanças climáticas.</p>
+  </div>
+
+  <div class="list">
+    <a class="row reveal" href="https://www.ipcc.ch/" target="_blank" rel="noopener" style="text-decoration:none"><span>📘</span><div><b>IPCC</b><p>Avaliações científicas internacionais sobre causas, impactos, riscos, mitigação e adaptação.</p></div></a>
+    <a class="row reveal" href="https://climate.nasa.gov/" target="_blank" rel="noopener" style="text-decoration:none"><span>🛰️</span><div><b>NASA Climate</b><p>Explicações e evidências sobre o sistema climático e o aquecimento global.</p></div></a>
+    <a class="row reveal" href="https://www.gov.br/inpe/" target="_blank" rel="noopener" style="text-decoration:none"><span>🇧🇷</span><div><b>INPE</b><p>Pesquisa, observação da Terra e monitoramento ambiental no Brasil.</p></div></a>
+    <a class="row reveal" href="https://www.gov.br/mma/" target="_blank" rel="noopener" style="text-decoration:none"><span>🌿</span><div><b>Ministério do Meio Ambiente e Mudança do Clima</b><p>Políticas e informações ambientais e climáticas brasileiras.</p></div></a>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="head">
+    <div class="kicker">Continue explorando</div>
+    <h2>Abra o projeto no celular.</h2>
+    <p>Quando o site estiver no GitHub Pages, o QR Code usa automaticamente o endereço publicado.</p>
+  </div>
+  <div class="qr-panel reveal">
+    <img id="projectQr" alt="QR Code para abrir este site">
+    <div>
+      <h3>Escaneie o QR Code</h3>
+      <p>Assim os visitantes da Feira podem continuar vendo o projeto depois da apresentação.</p>
+      <div class="qr-url" id="projectUrl"></div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="wrap v29-section">
+ <div class="final-experience reveal">
+   <span class="final-earth">🌎</span>
+   <div class="kicker">Você chegou ao final</div>
+   <h2>Entender o problema ajuda a tomar decisões melhores.</h2>
+   <p>Três ideias para levar desta experiência:</p>
+   <div class="final-actions">
+     <article><b>🌱 Reduzir</b><span>Mitigar emissões e proteger ecossistemas.</span></article>
+     <article><b>🏙️ Preparar</b><span>Adaptar cidades e comunidades aos riscos.</span></article>
+     <article><b>🔎 Informar</b><span>Usar ciência e fontes confiáveis.</span></article>
+   </div>
+   <a class="btn" href="index.html">↻ Recomeçar experiência</a>
+ </div>
+</section>
+
+</main>
+
+<script>
+(() => {
+  const url = location.href.replace(/fontes\.html.*$/,"index.html");
+  const img = document.getElementById("projectQr");
+  const label = document.getElementById("projectUrl");
+  if(label) label.textContent = url;
+  if(img){
+    img.src = "https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=" + encodeURIComponent(url);
+  }
+})();
+</script>
+
+<nav class="page-switch" aria-label="Navegação entre páginas"><a class="back" href="quiz.html">← Quiz</a><a class="forward" href="index.html">Voltar ao início →</a></nav>
+<footer>
+<div class="wrap footer">
+  <div><strong>Feira de Cultura — Colégio Bernoulli</strong><div class="muted">Mudanças Climáticas</div></div>
+  <div class="badge"><strong>Grupo 3 • Turma 8º E</strong><br><span>Colégio Bernoulli</span></div>
+</div>
+<div class="wrap bottom">Grupo 3 • Turma 8º E • Feira de Cultura • Colégio Bernoulli</div>
+<div class="site-version">V31</div>
+</footer>
+<script src="script.js?v=31"></script>
+</body>
+</html>

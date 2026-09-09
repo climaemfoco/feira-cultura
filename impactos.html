@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+
+<script>
+(function () {
+  try {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(reg){ reg.unregister(); });
+      });
+    }
+    if ("caches" in window) {
+      caches.keys().then(function(keys){
+        keys.forEach(function(key){ caches.delete(key); });
+      });
+    }
+  } catch(e) {}
+})();
+</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b3b29">
+<title>Impactos | Clima em Foco</title>
+<link rel="stylesheet" href="style.css?v=31">
+</head>
+<body>
+<header>
+<div class="nav">
+  <a class="brand" href="index.html"><span class="logo">🌿</span><span>Clima em Foco<small>Grupo 3 • Turma 8º E</small></span></a>
+  <nav class="links"><a class="" href="index.html">Início</a><a class="" href="entenda.html">Entenda</a><a class="" href="planeta.html">Planeta</a><a class="active" href="impactos.html">Impactos</a><a class="" href="solucoes.html">Soluções</a><a class="cta" href="quiz.html">Quiz</a></nav>
+  <button class="theme-toggle" type="button" aria-label="Alternar tema">🌙</button>
+</div>
+</header><div class="progress-shell" aria-hidden="true"><span style="width:57.1%"></span></div>
+
+<main>
+<section class="wrap">
+  <div class="head">
+    <div class="kicker">Impactos</div>
+    <h1 style="font-size:clamp(3rem,6vw,5.2rem)">O aquecimento altera todo o sistema climático.</h1>
+    <p class="lead">Mesmo uma mudança relativamente pequena na média global altera o equilíbrio de um sistema enorme. Isso influencia calor, chuvas, gelo, oceanos, ecossistemas e a vida nas cidades.</p>
+  </div>
+
+  <div class="cards">
+    <div class="card reveal"><div class="icon">☀️</div><h3>Calor extremo</h3><p>Ondas de calor podem se tornar mais frequentes, longas ou intensas, aumentando riscos à saúde.</p></div>
+    <div class="card reveal"><div class="icon">🌊</div><h3>Nível do mar</h3><p>Água mais quente se expande e o derretimento de gelo continental acrescenta água aos oceanos.</p></div>
+    <div class="card reveal"><div class="icon">🌧️</div><h3>Ciclo da água</h3><p>O aquecimento pode intensificar a evaporação e alterar padrões de chuva, secas e eventos extremos.</p></div>
+    <div class="card reveal"><div class="icon">🐾</div><h3>Biodiversidade</h3><p>Espécies e ecossistemas precisam se adaptar, migrar ou enfrentar condições diferentes das que existiam antes.</p></div>
+    <div class="card reveal"><div class="icon">🌾</div><h3>Alimentos</h3><p>Calor, disponibilidade de água e eventos extremos podem afetar produtividade agrícola e cadeias de abastecimento.</p></div>
+    <div class="card reveal"><div class="icon">🏙️</div><h3>Cidades</h3><p>Enchentes, ilhas de calor e outros riscos exigem planejamento urbano e infraestrutura mais resiliente.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="head">
+    <div class="kicker">Brasil</div>
+    <h2>Por que isso importa para nós?</h2>
+    <p class="lead">O Brasil reúne grandes cidades, áreas costeiras, produção agrícola e alguns dos ecossistemas mais importantes do planeta. Por isso, diferentes regiões enfrentam riscos diferentes.</p>
+  </div>
+
+  <div class="brazil-grid">
+    <article class="brazil-card reveal"><h3>🌡️ Ondas de calor</h3><p>Temperaturas muito altas podem afetar saúde, aprendizagem, trabalho ao ar livre e consumo de energia.</p></article>
+    <article class="brazil-card reveal"><h3>🌧️ Enchentes e deslizamentos</h3><p>Chuvas intensas se tornam especialmente perigosas onde há ocupação de encostas, impermeabilização do solo e drenagem insuficiente.</p></article>
+    <article class="brazil-card reveal"><h3>🔥 Florestas e queimadas</h3><p>Calor, secas e mudanças no uso da terra podem favorecer incêndios e pressionar biomas como Amazônia, Cerrado e Pantanal.</p></article>
+    <article class="brazil-card reveal"><h3>🌾 Agricultura e água</h3><p>Alterações de temperatura e chuva podem mudar calendários agrícolas, produtividade e disponibilidade de água.</p></article>
+  </div>
+
+  <div class="key-message reveal">
+    <b>Impacto climático não depende só do fenômeno natural.</b>
+    <p>O tamanho do dano também depende de onde e como as pessoas vivem, da infraestrutura disponível e da capacidade de prevenção e resposta.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="head reveal">
+    <div class="kicker">Explore o Brasil</div>
+    <h2>O mesmo problema aparece de formas diferentes.</h2>
+    <p>Toque nos pontos do mapa para ver exemplos de riscos climáticos em diferentes regiões. O mapa usa uma imagem de satélite da NASA com um enquadramento regional: o Brasil aparece inteiro, centralizado e com contexto da América do Sul e do Atlântico. Os pontos agora usam coordenadas geográficas de referência e a mesma projeção da imagem de satélite, para aparecerem sobre as regiões corretas.</p>
+  </div>
+  <div class="brazil-explorer reveal">
+    <div class="brazil-map brazil-satellite" aria-label="Vista de satélite do Brasil">
+      <div class="satellite-frame" id="satelliteFrame">
+        <canvas id="brazilSatellite" width="900" height="900" aria-label="Imagem de satélite da região do Brasil"></canvas>
+        <div id="brazilMarkers" class="satellite-markers"></div>
+      </div>
+      <div class="satellite-status" id="brazilStatus">● Carregando imagem real…</div>
+    </div>
+    <div class="region-panel">
+      <div class="region-icon" id="regionIcon">🇧🇷</div>
+      <h3 id="regionTitle">Escolha uma região</h3>
+      <p id="regionText">Os impactos dependem do clima local, do ambiente, da infraestrutura e da vulnerabilidade das pessoas. Clique em um ponto do mapa.</p>
+    </div>
+  </div>
+</section>
+<script>
+(() => {
+ const data={
+  amazonia:["🌳","Amazônia","Aumento do calor, secas e mudanças no uso da terra podem pressionar a floresta e favorecer incêndios. A conservação da vegetação é importante para o clima e para a biodiversidade.",-3.119,-60.022],
+  nordeste:["☀️","Nordeste","Calor e disponibilidade de água são questões importantes. Mudanças nas chuvas e secas podem aumentar desafios para abastecimento, agricultura e saúde.",-8.0476,-34.8770],
+  pantanal:["🔥","Pantanal","Secas, calor e fogo podem afetar ecossistemas e biodiversidade. Prevenção de incêndios e proteção ambiental ajudam a reduzir riscos.",-17.65,-57.43],
+  cidades:["🏙️","São Paulo / Sudeste","Ondas de calor, enchentes e ilhas de calor podem ser agravadas por pouca arborização, impermeabilização do solo e ocupação de áreas vulneráveis.",-23.5505,-46.6333],
+  sul:["🌧️","Porto Alegre / Sul","Eventos de chuva intensa e enchentes mostram a importância de sistemas de alerta, planejamento urbano, drenagem e redução da exposição a áreas de risco.",-30.0346,-51.2177]
+ };
+
+ const canvas=document.getElementById("brazilSatellite");
+ const ctx=canvas.getContext("2d");
+ const frame=document.getElementById("satelliteFrame");
+ const markerLayer=document.getElementById("brazilMarkers");
+ const status=document.getElementById("brazilStatus");
+
+ // Satellite crop bounds
+ const minLon=-92.0,maxLon=-18.0,minLat=-58.0,maxLat=18.0;
+
+ // Convert lon/lat to normalized position within THE SAME square frame as the canvas.
+ const px=(lon)=>(lon-minLon)/(maxLon-minLon)*100;
+ const py=(lat)=>(maxLat-lat)/(maxLat-minLat)*100;
+
+ function fallback(){
+   const g=ctx.createLinearGradient(0,0,900,900);
+   g.addColorStop(0,"#163d55");g.addColorStop(1,"#0a2637");
+   ctx.fillStyle=g;ctx.fillRect(0,0,900,900);
+   status.textContent="● Mapa climático";
+ }
+
+ const img=new Image();
+ img.onload=()=>{
+   const sx=(minLon+180)/360*img.width;
+   const sy=(90-maxLat)/180*img.height;
+   const sw=(maxLon-minLon)/360*img.width;
+   const sh=(maxLat-minLat)/180*img.height;
+   ctx.clearRect(0,0,900,900);
+   ctx.drawImage(img,sx,sy,sw,sh,0,0,900,900);
+   const shade=ctx.createLinearGradient(0,0,0,900);
+   shade.addColorStop(0,"rgba(5,28,23,.01)");
+   shade.addColorStop(1,"rgba(5,28,23,.10)");
+   ctx.fillStyle=shade;ctx.fillRect(0,0,900,900);
+   status.textContent="● Imagem real da Terra • NASA";
+ };
+ img.onerror=fallback;
+ img.src="https://svs.gsfc.nasa.gov/vis/a000000/a003600/a003615/flat_earth03.jpg";
+
+ Object.entries(data).forEach(([key,v])=>{
+   const b=document.createElement("button");
+   b.className="sat-map-point";
+   b.style.left=px(v[4])+"%";
+   b.style.top=py(v[3])+"%";
+   b.innerHTML=`<span></span><em>${v[1]}</em>`;
+   b.setAttribute("aria-label",v[1]);
+   b.onclick=()=>{
+     document.querySelectorAll(".sat-map-point").forEach(x=>x.classList.remove("active"));
+     b.classList.add("active");
+     document.getElementById("regionIcon").textContent=v[0];
+     document.getElementById("regionTitle").textContent=v[1];
+     document.getElementById("regionText").textContent=v[2];
+   };
+   markerLayer.appendChild(b);
+ });
+})();
+</script>
+
+</main>
+
+<nav class="page-switch" aria-label="Navegação entre páginas"><a class="back" href="planeta.html">← Planeta</a><a class="forward" href="solucoes.html">Soluções →</a></nav>
+<footer>
+<div class="wrap footer">
+  <div><strong>Feira de Cultura — Colégio Bernoulli</strong><div class="muted">Mudanças Climáticas</div></div>
+  <div class="badge"><strong>Grupo 3 • Turma 8º E</strong><br><span>Colégio Bernoulli</span></div>
+</div>
+<div class="wrap bottom">Grupo 3 • Turma 8º E • Feira de Cultura • Colégio Bernoulli</div>
+<div class="site-version">V31</div>
+</footer>
+<script src="script.js?v=31"></script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!doctype html><html lang="pt-BR"><head>
+
+<script>
+(function () {
+  try {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(reg){ reg.unregister(); });
+      });
+    }
+    if ("caches" in window) {
+      caches.keys().then(function(keys){
+        keys.forEach(function(key){ caches.delete(key); });
+      });
+    }
+  } catch(e) {}
+})();
+</script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b3b29"><title>Planeta Interativo | Clima em Foco</title><link rel="stylesheet" href="style.css?v=31"></head><body>
+<header><div class="nav"><a class="brand" href="index.html"><span class="logo">🌿</span><span>Clima em Foco<small>Grupo 3 • Turma 8º E</small></span></a><nav class="links"><a class=" " href="index.html">Início</a><a class=" " href="entenda.html">Entenda</a><a class="active " href="planeta.html">Planeta</a><a class=" " href="impactos.html">Impactos</a><a class=" " href="solucoes.html">Soluções</a><a class=" cta" href="quiz.html">Quiz</a></nav><button class="theme-toggle" type="button" aria-label="Alternar tema">🌙</button></div></header><div class="progress-shell" aria-hidden="true"><span style="width:42.9%"></span></div>
+
+
+
+<main>
+<section class="wrap">
+  <div class="head">
+    <div class="kicker">Planeta interativo</div>
+    <h1 style="font-size:clamp(3rem,6vw,5.2rem)">Gire a Terra e explore os impactos.</h1>
+    <p class="lead">Arraste com o dedo ou mouse para girar. Use a roda do mouse ou os botões de zoom. Toque nos pontos para descobrir como as mudanças climáticas afetam diferentes regiões.</p>
+  </div>
+
+  <div class="globe-shell">
+    <div class="globe-stage reveal" id="globeStage">
+      <div class="globe-status">● Carregando imagem real da Terra…</div>
+      <canvas id="earthCanvas" aria-label="Globo 3D interativo da Terra"></canvas>
+      <div id="markerLayer" class="marker-layer" aria-label="Pontos interativos do globo"></div>
+      <div class="globe-toolbar">
+        <button id="zoomIn" type="button" aria-label="Aproximar">＋</button>
+        <button id="zoomOut" type="button" aria-label="Afastar">−</button>
+        <button id="fullscreenGlobe" title="Tela cheia" aria-label="Abrir globo em tela cheia">⛶</button>
+          <button id="resetGlobe" type="button" aria-label="Reiniciar posição">↻</button>
+      </div>
+      <div class="globe-help">↔ arraste para girar • toque nos pontos • +/− para zoom</div>
+      
+    </div>
+
+    <aside class="globe-info reveal" aria-live="polite">
+      <span class="region-tag" id="regionTag">Planeta Terra</span>
+      <h2 id="globeTitle" style="font-size:2.35rem">Explore o globo</h2>
+      <p id="globeText" class="muted">O clima é um sistema conectado. Gire o planeta e selecione um ponto para conhecer um exemplo de impacto climático.</p>
+      <div class="globe-legend">
+        <span><i class="dot hot"></i>calor/cidades</span>
+        <span><i class="dot ocean"></i>oceanos</span>
+        <span><i class="dot forest"></i>florestas</span>
+        <span><i class="dot ice"></i>gelo</span>
+      </div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+      <strong>O que torna este globo 3D?</strong>
+      <p class="muted">A Terra é desenhada como uma esfera tridimensional com perspectiva, iluminação, atmosfera, rotação e pontos posicionados por latitude e longitude.</p>
+    </aside>
+  </div>
+<p class="muted" style="font-size:.78rem;margin-top:14px">
+  Textura da Terra: NASA/Goddard Space Flight Center Scientific Visualization Studio —
+  Blue Marble Next Generation.
+</p>
+
+</section>
+
+<section class="wrap">
+  <div class="head"><div class="kicker">Conexões do sistema climático</div><h2>O que acontece em um lugar pode ter efeitos muito além dele.</h2></div>
+  <div class="fact-grid">
+    <div class="fact"><b>Oceanos</b><p class="muted">Absorvem grande parte do excesso de calor e influenciam temperatura, chuvas e nível do mar.</p></div>
+    <div class="fact"><b>Florestas</b><p class="muted">Armazenam carbono, movimentam água e abrigam biodiversidade.</p></div>
+    <div class="fact"><b>Gelo</b><p class="muted">A perda de gelo continental contribui para a elevação do nível do mar.</p></div>
+    <div class="fact"><b>Atmosfera</b><p class="muted">Transporta calor e umidade e contém gases responsáveis pelo efeito estufa.</p></div>
+  </div>
+</section>
+
+</main>
+<nav class="page-switch" aria-label="Navegação entre páginas"><a class="back" href="entenda.html">← Entenda</a><a class="forward" href="impactos.html">Impactos →</a></nav>
+<footer><div class="wrap footer"><div><strong>Feira de Cultura — Colégio Bernoulli</strong><div class="muted">Mudanças Climáticas</div></div><div class="badge"><strong>Grupo 3 • Turma 8º E</strong><br><span>Colégio Bernoulli</span></div></div><div class="wrap bottom">Grupo 3 • Turma 8º E • Feira de Cultura • Colégio Bernoulli</div><div class="site-version">V31</div>
+</footer>
+
+
+
+
+
+
+<script>
+(() => {
+  const canvas = document.getElementById("earthCanvas");
+  if (!canvas) return;
+
+  const stage = document.getElementById("globeStage");
+  const layer = document.getElementById("markerLayer");
+  const ctx = canvas.getContext("2d", {alpha:true});
+  const titleEl = document.getElementById("globeTitle");
+  const textEl = document.getElementById("globeText");
+  const tagEl = document.getElementById("regionTag");
+  const statusEl = stage.querySelector(".globe-status");
+
+  const NASA_TEXTURE =
+    "https://svs.gsfc.nasa.gov/vis/a000000/a003600/a003615/flat_earth03.jpg";
+
+  const earthImg = new Image();
+  let textureReady = false;
+  earthImg.onload = () => {
+    textureReady = true;
+    if (statusEl) statusEl.textContent = "● Terra real • NASA";
+  };
+  earthImg.onerror = () => {
+    if (statusEl) statusEl.textContent = "● A textura não carregou";
+  };
+  earthImg.src = NASA_TEXTURE;
+
+  const points = [
+    {lat:-15.8,lng:-47.9,kind:"forest",tag:"Brasil",title:"Florestas e ciclo da água",text:"Florestas armazenam carbono e ajudam a movimentar água pela atmosfera. Desmatamento e alterações nas chuvas podem aumentar a vulnerabilidade de ecossistemas e comunidades."},
+    {lat:40.7,lng:-74.0,kind:"hot",tag:"Cidades",title:"Calor e áreas urbanas",text:"Ondas de calor e chuvas intensas podem aumentar riscos nas cidades. Arborização, drenagem e planejamento urbano são exemplos de adaptação."},
+    {lat:0,lng:-150,kind:"ocean",tag:"Oceano Pacífico",title:"Oceanos mais quentes",text:"Os oceanos absorvem grande parte do excesso de calor. O aquecimento da água afeta ecossistemas marinhos e também contribui para a elevação do nível do mar."},
+    {lat:73,lng:-40,kind:"ice",tag:"Groenlândia",title:"Gelo continental",text:"O aquecimento favorece a perda de massa de grandes mantos de gelo. Quando gelo continental derrete e chega ao oceano, contribui para elevar o nível do mar."},
+    {lat:-75,lng:20,kind:"ice",tag:"Antártica",title:"Regiões polares",text:"Mudanças no gelo polar se conectam ao nível do mar, aos oceanos e ao sistema climático global."},
+    {lat:14,lng:24,kind:"hot",tag:"África",title:"Calor, água e agricultura",text:"Mudanças de temperatura e chuva podem aumentar pressões sobre água, agricultura e saúde, especialmente onde a capacidade de adaptação é menor."}
+  ];
+
+  const markerEls = points.map(d => {
+    const b = document.createElement("button");
+    b.className = "globe-marker";
+    b.dataset.kind = d.kind;
+    b.type = "button";
+    b.title = d.title;
+    b.setAttribute("aria-label", d.title);
+    b.addEventListener("click", () => {
+      tagEl.textContent = d.tag;
+      titleEl.textContent = d.title;
+      textEl.textContent = d.text;
+      autoRotate = false;
+    });
+    layer.appendChild(b);
+    return b;
+  });
+
+  let yaw = 0.35, zoom = 1;
+  let dragging = false, lastX = 0, autoRotate = true;
+  let W=0,H=0,cx=0,cy=0,R=0;
+  let lastRenderedYaw = 999, lastRenderedZoom = 999;
+  const off = document.createElement("canvas");
+  const offCtx = off.getContext("2d", {alpha:true});
+
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const wrapPi=a=>{
+    while(a>Math.PI)a-=Math.PI*2;
+    while(a<-Math.PI)a+=Math.PI*2;
+    return a;
+  };
+
+  function resize(){
+    const r=stage.getBoundingClientRect();
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    W=Math.max(280,Math.round(r.width));
+    H=Math.max(430,Math.round(r.height));
+    canvas.width=Math.round(W*dpr);
+    canvas.height=Math.round(H*dpr);
+    canvas.style.width=W+"px";
+    canvas.style.height=H+"px";
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    off.width=Math.round(W*dpr);
+    off.height=Math.round(H*dpr);
+    offCtx.setTransform(dpr,0,0,dpr,0,0);
+
+    cx=W/2; cy=H/2+4;
+    R=Math.min(W,H)*0.34*zoom;
+    lastRenderedYaw=999;
+  }
+  resize();
+  addEventListener("resize",resize);
+
+  function project(latDeg,lngDeg){
+    const lat=latDeg*Math.PI/180;
+    const delta=wrapPi(lngDeg*Math.PI/180 + yaw);
+    const cosLat=Math.cos(lat);
+    const z=cosLat*Math.cos(delta);
+    return {
+      x:cx + R*cosLat*Math.sin(delta),
+      y:cy - R*Math.sin(lat),
+      z
+    };
+  }
+
+  function drawStars(){
+    ctx.save();
+    for(let i=0;i<95;i++){
+      const x=(i*101.371+17)%W, y=(i*61.719+9)%H;
+      const dx=x-cx,dy=y-cy;
+      if(dx*dx+dy*dy<R*R*1.5) continue;
+      const a=.22+(i%7)*.065, s=(i%11===0)?1.5:.7;
+      ctx.fillStyle=`rgba(255,255,255,${Math.min(a,.68)})`;
+      ctx.fillRect(x,y,s,s);
+    }
+    ctx.restore();
+  }
+
+  function fallback(){
+    const g=offCtx.createRadialGradient(cx-R*.35,cy-R*.4,R*.04,cx,cy,R);
+    g.addColorStop(0,"#56b7dd");
+    g.addColorStop(.5,"#177ba9");
+    g.addColorStop(1,"#063653");
+    offCtx.fillStyle=g;
+    offCtx.beginPath();offCtx.arc(cx,cy,R,0,Math.PI*2);offCtx.fill();
+  }
+
+  function renderTexture(){
+    offCtx.clearRect(0,0,W,H);
+    if(!textureReady){ fallback(); return; }
+
+    R=Math.min(W,H)*0.34*zoom;
+    offCtx.save();
+    offCtx.beginPath();
+    offCtx.arc(cx,cy,R,0,Math.PI*2);
+    offCtx.clip();
+
+    const imgW=earthImg.naturalWidth, imgH=earthImg.naturalHeight;
+    const latStep=3;
+    const lonStep=3;
+
+    // True orthographic mapping using the same projection as the markers.
+    for(let lat=-90;lat<90;lat+=latStep){
+      const lat2=Math.min(90,lat+latStep);
+      const y1=cy-R*Math.sin(lat*Math.PI/180);
+      const y2=cy-R*Math.sin(lat2*Math.PI/180);
+      const top=Math.min(y1,y2), h=Math.max(1,Math.abs(y2-y1)+1);
+
+      const sy=(90-lat2)/180*imgH;
+      const sh=(lat2-lat)/180*imgH;
+
+      for(let lon=-180;lon<180;lon+=lonStep){
+        const lon2=lon+lonStep;
+        const midLat=(lat+lat2)/2;
+        const midLon=(lon+lon2)/2;
+        const pm=project(midLat,midLon);
+        if(pm.z<=0) continue;
+
+        const p1=project(midLat,lon);
+        const p2=project(midLat,lon2);
+        const left=Math.min(p1.x,p2.x);
+        const w=Math.max(1,Math.abs(p2.x-p1.x)+1);
+
+        const sx=(lon+180)/360*imgW;
+        const sw=lonStep/360*imgW;
+
+        offCtx.drawImage(earthImg,sx,sy,sw,sh,left,top,w,h);
+      }
+    }
+    offCtx.restore();
+
+    // Natural lighting and spherical edge shadow.
+    offCtx.save();
+    offCtx.beginPath();offCtx.arc(cx,cy,R,0,Math.PI*2);offCtx.clip();
+
+    const hi=offCtx.createRadialGradient(cx-R*.42,cy-R*.44,0,cx-R*.42,cy-R*.44,R*.8);
+    hi.addColorStop(0,"rgba(255,255,255,.24)");
+    hi.addColorStop(.35,"rgba(255,255,255,.08)");
+    hi.addColorStop(1,"rgba(255,255,255,0)");
+    offCtx.fillStyle=hi;offCtx.fillRect(cx-R,cy-R,R*2,R*2);
+
+    const shade=offCtx.createRadialGradient(cx-R*.12,cy-R*.08,R*.48,cx+R*.18,cy+R*.1,R*1.06);
+    shade.addColorStop(0,"rgba(0,0,0,0)");
+    shade.addColorStop(.62,"rgba(0,0,0,.04)");
+    shade.addColorStop(1,"rgba(0,0,0,.62)");
+    offCtx.fillStyle=shade;offCtx.fillRect(cx-R,cy-R,R*2,R*2);
+    offCtx.restore();
+
+    lastRenderedYaw=yaw;
+    lastRenderedZoom=zoom;
+  }
+
+  function drawAtmosphere(){
+    const halo=ctx.createRadialGradient(cx,cy,R*.94,cx,cy,R*1.13);
+    halo.addColorStop(0,"rgba(93,210,255,0)");
+    halo.addColorStop(.42,"rgba(93,210,255,.14)");
+    halo.addColorStop(.72,"rgba(93,210,255,.29)");
+    halo.addColorStop(1,"rgba(93,210,255,0)");
+    ctx.fillStyle=halo;
+    ctx.beginPath();ctx.arc(cx,cy,R*1.14,0,Math.PI*2);ctx.fill();
+
+    ctx.strokeStyle="rgba(148,226,255,.70)";
+    ctx.lineWidth=Math.max(1.2,R*.007);
+    ctx.beginPath();ctx.arc(cx,cy,R+1,0,Math.PI*2);ctx.stroke();
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    R=Math.min(W,H)*0.34*zoom;
+    drawStars();
+
+    const bg=ctx.createRadialGradient(cx,cy,R*.35,cx,cy,R*1.5);
+    bg.addColorStop(0,"rgba(28,112,151,.16)");
+    bg.addColorStop(1,"rgba(28,112,151,0)");
+    ctx.fillStyle=bg;
+    ctx.beginPath();ctx.arc(cx,cy,R*1.5,0,Math.PI*2);ctx.fill();
+
+    if(Math.abs(lastRenderedYaw-yaw)>.005 || Math.abs(lastRenderedZoom-zoom)>.005 || !textureReady){
+      renderTexture();
+    }
+    ctx.drawImage(off,0,0,W,H);
+    drawAtmosphere();
+
+    points.forEach((d,i)=>{
+      const p=project(d.lat,d.lng);
+      markerEls[i].style.left=p.x+"px";
+      markerEls[i].style.top=p.y+"px";
+      markerEls[i].style.opacity=p.z>.035?"1":"0";
+      markerEls[i].style.pointerEvents=p.z>.035?"auto":"none";
+      markerEls[i].style.transform=`translate(-50%,-50%) scale(${.82+Math.max(0,p.z)*.26})`;
+    });
+  }
+
+  canvas.addEventListener("pointerdown",e=>{
+    dragging=true;lastX=e.clientX;autoRotate=false;
+    try{canvas.setPointerCapture(e.pointerId)}catch(_){}
+  });
+  canvas.addEventListener("pointermove",e=>{
+    if(!dragging)return;
+    yaw+= (e.clientX-lastX)*.0075;
+    lastX=e.clientX;
+  });
+  canvas.addEventListener("pointerup",e=>{
+    dragging=false;
+    try{canvas.releasePointerCapture(e.pointerId)}catch(_){}
+  });
+  canvas.addEventListener("pointercancel",()=>dragging=false);
+
+  canvas.addEventListener("wheel",e=>{
+    e.preventDefault();
+    zoom=clamp(zoom-e.deltaY*.0011,.78,1.30);
+    autoRotate=false;
+    lastRenderedZoom=999;
+  },{passive:false});
+
+  document.getElementById("zoomIn").addEventListener("click",()=>{
+    zoom=clamp(zoom+.09,.78,1.30);autoRotate=false;lastRenderedZoom=999;
+  });
+  document.getElementById("zoomOut").addEventListener("click",()=>{
+    zoom=clamp(zoom-.09,.78,1.30);autoRotate=false;lastRenderedZoom=999;
+  });
+  document.getElementById("resetGlobe").addEventListener("click",()=>{
+    yaw=.35;zoom=1;autoRotate=true;lastRenderedYaw=999;
+  });
+
+  const fsBtn=document.getElementById("fullscreenGlobe");
+  if(fsBtn){
+    fsBtn.addEventListener("click",async()=>{
+      try{
+        if(!document.fullscreenElement){
+          await stage.requestFullscreen();
+          fsBtn.textContent="✕";
+          fsBtn.title="Sair da tela cheia";
+        }else{
+          await document.exitFullscreen();
+        }
+      }catch(e){}
+    });
+    document.addEventListener("fullscreenchange",()=>{
+      if(!document.fullscreenElement){
+        fsBtn.textContent="⛶";
+        fsBtn.title="Tela cheia";
+      }
+      setTimeout(resize,80);
+    });
+  }
+
+  let last=performance.now();
+  function loop(now){
+    const dt=Math.min((now-last)/1000,.05);last=now;
+    if(autoRotate) yaw+=dt*.08;
+    draw();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+
+
+
+
+<script src="script.js?v=31"></script>
+</body></html>

@@ -1,0 +1,10 @@
+CLIMA EM FOCO — V31
+
+AJUSTES:
+- removido completamente o desafio de encontrar lugares no globo;
+- removida a antiga seção visual da cidade;
+- substituída por um explorador de aquecimento mais limpo e científico;
+- temperatura agora é controlada por uma barra deslizante contínua de +1,5 °C a +4,0 °C;
+- textos de calor, eventos extremos e ecossistemas mudam conforme a barra;
+- globo principal não foi alterado;
+- rodapé atualizado para V31.

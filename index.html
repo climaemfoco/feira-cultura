@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+
+<script>
+(function () {
+  try {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(reg){ reg.unregister(); });
+      });
+    }
+    if ("caches" in window) {
+      caches.keys().then(function(keys){
+        keys.forEach(function(key){ caches.delete(key); });
+      });
+    }
+  } catch(e) {}
+})();
+</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b3b29">
+<title>Início | Clima em Foco</title>
+<link rel="stylesheet" href="style.css?v=31">
+</head>
+<body>
+<header>
+<div class="nav">
+  <a class="brand" href="index.html"><span class="logo">🌿</span><span>Clima em Foco<small>Grupo 3 • Turma 8º E</small></span></a>
+  <nav class="links"><a class="active" href="index.html">Início</a><a class="" href="entenda.html">Entenda</a><a class="" href="planeta.html">Planeta</a><a class="" href="impactos.html">Impactos</a><a class="" href="solucoes.html">Soluções</a><a class="cta" href="quiz.html">Quiz</a></nav>
+  <button class="theme-toggle" type="button" aria-label="Alternar tema">🌙</button>
+</div>
+</header><div class="progress-shell" aria-hidden="true"><span style="width:14.3%"></span></div>
+
+<main>
+  <div class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Feira de Cultura • Colégio Bernoulli • Grupo 3 • Turma 8º E</span>
+        <h1>Entender o clima é entender o nosso futuro.</h1>
+        <p class="lead">Este projeto explica, de forma visual e interativa, por que a Terra está aquecendo, como isso altera o clima e o que pode ser feito para reduzir riscos.</p>
+        <div class="hero-stat">
+          <span>🌡️</span>
+          <span><strong>≈ 1,1 °C</strong> de aquecimento global em 2011–2020 em relação a 1850–1900.</span>
+        </div>
+        <div class="buttons">
+          <a class="btn primary" href="entenda.html">Começar pelo básico</a>
+          <a class="btn" href="planeta.html">Explorar o planeta 🌍</a>
+        </div>
+      </div>
+      <div class="visual reveal">
+        <div class="kicker" >Clima em foco</div>
+        <h2 style="font-size:2.7rem;letter-spacing:-2px">Um planeta, vários sinais.</h2>
+        <p >O clima conecta atmosfera, oceanos, gelo, florestas e cidades. Quando uma parte muda, os efeitos podem se espalhar pelo sistema inteiro.</p>
+        <div style="font-size:8rem;text-align:center;margin-top:30px">🌎</div>
+      </div>
+    </div>
+  </div>
+
+  <section class="wrap">
+    <div class="head reveal">
+      <div class="kicker">Caminho do projeto</div>
+      <h2>Do problema às soluções.</h2>
+      <p>As páginas seguem uma ordem: primeiro as causas, depois o planeta, os impactos, as respostas e, por fim, um quiz.</p>
+    </div>
+    <div class="cards">
+      <a class="card reveal" style="text-decoration:none" href="entenda.html"><div class="icon">🌡️</div><h3>1. Entenda</h3><p>Efeito estufa, aquecimento global e diferença entre tempo e clima.</p></a>
+      <a class="card reveal" style="text-decoration:none" href="planeta.html"><div class="icon">🌍</div><h3>2. Planeta</h3><p>Gire o globo e veja como diferentes regiões se relacionam com o tema.</p></a>
+      <a class="card reveal" style="text-decoration:none" href="impactos.html"><div class="icon">🌊</div><h3>3. Impactos</h3><p>Calor, chuvas, oceanos, biodiversidade, alimentos e cidades.</p></a>
+      <a class="card reveal" style="text-decoration:none" href="solucoes.html"><div class="icon">🌱</div><h3>4. Soluções</h3><p>Mitigação para reduzir causas e adaptação para diminuir danos.</p></a>
+      <a class="card reveal" style="text-decoration:none" href="quiz.html"><div class="icon">🧠</div><h3>5. Quiz</h3><p>Teste o que você aprendeu durante a experiência.</p></a>
+      <a class="card reveal" style="text-decoration:none" href="fontes.html"><div class="icon">📚</div><h3>6. Fontes</h3><p>Consulte as instituições científicas usadas como referência.</p></a>
+    </div>
+  </section>
+
+<section class="wrap">
+  <div class="head reveal">
+    <div class="kicker">O problema em números</div>
+    <h2>O clima está mudando — e conseguimos medir isso.</h2>
+    <p>Alguns indicadores ajudam a enxergar a escala do problema. Os valores abaixo são apresentados de forma resumida para a exposição.</p>
+  </div>
+  <div class="exhibit-grid">
+    <article class="stat-card reveal">
+      <div class="number">≈1,1 °C</div>
+      <h3>Aquecimento observado</h3>
+      <p>A temperatura média global da superfície em 2011–2020 ficou cerca de 1,1 °C acima de 1850–1900.</p>
+      <small>Fonte: IPCC AR6</small>
+    </article>
+    <article class="stat-card reveal">
+      <div class="number">CO₂</div>
+      <h3>Principal contribuição humana</h3>
+      <p>O dióxido de carbono é o maior responsável pelo aquecimento causado pelas atividades humanas ao longo do tempo.</p>
+      <small>Fonte: IPCC</small>
+    </article>
+    <article class="stat-card reveal">
+      <div class="number">2 frentes</div>
+      <h3>Mitigação + adaptação</h3>
+      <p>Reduzir as causas do aquecimento e diminuir a vulnerabilidade aos impactos são estratégias complementares.</p>
+      <small>Fonte: IPCC</small>
+    </article>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="myth-game reveal" id="mythGame">
+    <div class="kicker" style="color:#9ee0bc">Mito ou verdade?</div>
+    <h2>Você consegue identificar uma ideia enganosa?</h2>
+    <div class="myth-statement" id="mythStatement">“Se hoje está frio, o aquecimento global não existe.”</div>
+    <div class="myth-actions">
+      <button type="button" data-choice="myth">MITO</button>
+      <button type="button" data-choice="truth">VERDADE</button>
+      <button type="button" id="nextMyth" style="display:none">Próxima →</button>
+    </div>
+    <p class="myth-answer" id="mythAnswer">Escolha uma resposta.</p>
+  </div>
+</section>
+
+<script>
+(() => {
+  const items=[
+    {s:"“Se hoje está frio, o aquecimento global não existe.”",c:"myth",e:"MITO. Tempo e clima são coisas diferentes. Um dia frio não apaga uma tendência global observada durante décadas."},
+    {s:"“O efeito estufa natural é necessário para a vida na Terra.”",c:"truth",e:"VERDADE. O problema é a intensificação do efeito estufa pelo aumento de gases causado por atividades humanas."},
+    {s:"“Adaptação e mitigação significam a mesma coisa.”",c:"myth",e:"MITO. Mitigação reduz as causas; adaptação reduz vulnerabilidades e danos."},
+    {s:"“Mudanças climáticas podem afetar chuvas, oceanos e ecossistemas.”",c:"truth",e:"VERDADE. O aquecimento influencia várias partes conectadas do sistema climático."}
+  ];
+  let i=0,answered=false;
+  const s=document.getElementById("mythStatement"),a=document.getElementById("mythAnswer"),next=document.getElementById("nextMyth");
+  document.querySelectorAll("#mythGame [data-choice]").forEach(b=>b.onclick=()=>{
+    if(answered)return; answered=true;
+    const ok=b.dataset.choice===items[i].c;
+    a.textContent=(ok?"✅ Acertou! ":"❌ Quase! ")+items[i].e;
+    next.style.display="inline-block";
+  });
+  next.onclick=()=>{
+    i=(i+1)%items.length;answered=false;s.textContent=items[i].s;a.textContent="Escolha uma resposta.";next.style.display="none";
+  };
+})();
+</script>
+
+</main>
+
+<nav class="page-switch" aria-label="Navegação entre páginas"><a class="forward" href="entenda.html">Entenda →</a></nav>
+<footer>
+<div class="wrap footer">
+  <div><strong>Feira de Cultura — Colégio Bernoulli</strong><div class="muted">Mudanças Climáticas</div></div>
+  <div class="badge"><strong>Grupo 3 • Turma 8º E</strong><br><span>Colégio Bernoulli</span></div>
+</div>
+<div class="wrap bottom">Grupo 3 • Turma 8º E • Feira de Cultura • Colégio Bernoulli</div>
+<div class="site-version">V31</div>
+</footer>
+<script src="script.js?v=31"></script>
+</body>
+</html>

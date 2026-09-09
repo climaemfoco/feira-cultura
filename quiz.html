@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+
+<script>
+(function () {
+  try {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(reg){ reg.unregister(); });
+      });
+    }
+    if ("caches" in window) {
+      caches.keys().then(function(keys){
+        keys.forEach(function(key){ caches.delete(key); });
+      });
+    }
+  } catch(e) {}
+})();
+</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b3b29">
+<title>Quiz | Clima em Foco</title>
+<link rel="stylesheet" href="style.css?v=31">
+</head>
+<body>
+<header>
+<div class="nav">
+  <a class="brand" href="index.html"><span class="logo">🌿</span><span>Clima em Foco<small>Grupo 3 • Turma 8º E</small></span></a>
+  <nav class="links"><a class="" href="index.html">Início</a><a class="" href="entenda.html">Entenda</a><a class="" href="planeta.html">Planeta</a><a class="" href="impactos.html">Impactos</a><a class="" href="solucoes.html">Soluções</a><a class="active cta" href="quiz.html">Quiz</a></nav>
+  <button class="theme-toggle" type="button" aria-label="Alternar tema">🌙</button>
+</div>
+</header><div class="progress-shell" aria-hidden="true"><span style="width:85.7%"></span></div>
+
+<main>
+<section class="wrap">
+  <div class="head">
+    <div class="kicker">Quiz</div>
+    <h1 style="font-size:clamp(3rem,6vw,5.2rem)">Teste o que você aprendeu.</h1>
+    <p class="lead">São 8 perguntas. Depois de cada resposta, o site explica rapidamente o motivo.</p>
+  </div>
+
+  <div class="quiz reveal">
+    <div class="quiz-topline"><span id="count">Pergunta 1 de 8</span><b id="score">0 pontos</b></div>
+    <div class="quiz-progress"><span id="quizProgressBar"></span></div>
+    <h2 id="question" style="font-size:2rem"></h2>
+    <div class="options" id="options"></div>
+    <p id="feedback" class="quiz-feedback"></p>
+    <button id="next" class="btn" style="display:none">Próxima</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+const shuffled = arr => arr.map((v,i)=>({v,i})).sort(()=>Math.random()-.5);
+const qs = [
+  {
+    q:"Qual frase explica melhor o efeito estufa?",
+    a:["É sempre prejudicial e começou com a industrialização.","É um fenômeno natural que pode ser intensificado pelo aumento de gases na atmosfera.","É causado apenas pelo calor das cidades.","É a entrada de radiação ultravioleta pelo buraco na camada de ozônio."],
+    c:1,
+    e:"O efeito estufa natural ajuda a manter a Terra habitável. O problema é sua intensificação pelo aumento de gases como CO₂, CH₄ e N₂O."
+  },
+  {
+    q:"Por que a queima de combustíveis fósseis contribui para o aquecimento global?",
+    a:["Porque elimina o vapor d'água da atmosfera.","Porque faz o oceano produzir calor sozinho.","Porque bloqueia toda a luz solar.","Porque libera CO₂ e aumenta a concentração de gases de efeito estufa."],
+    c:3,
+    e:"Carvão, petróleo e gás natural liberam carbono que estava armazenado, aumentando a concentração de CO₂ na atmosfera."
+  },
+  {
+    q:"Qual é a diferença entre tempo e clima?",
+    a:["Clima descreve somente a temperatura; tempo descreve apenas a chuva.","Tempo e clima são exatamente a mesma coisa.","Tempo descreve condições de curto prazo; clima envolve padrões e tendências de longo prazo.","Tempo dura décadas; clima muda a cada hora."],
+    c:2,
+    e:"Uma chuva ou frente fria é uma condição do tempo. O clima é analisado por padrões e tendências ao longo de períodos longos."
+  },
+  {
+    q:"O que significa adaptação às mudanças climáticas?",
+    a:["Reduzir vulnerabilidades e preparar pessoas e lugares para impactos climáticos.","Aumentar emissões para equilibrar a temperatura.","Parar todas as ações de mitigação.","Tentar impedir qualquer mudança natural no clima."],
+    c:0,
+    e:"Adaptação busca reduzir danos e vulnerabilidades. Ela complementa a mitigação, que atua sobre as causas."
+  },
+  {
+    q:"Como o aquecimento global pode contribuir para a elevação do nível médio do mar?",
+    a:["Somente pelo gelo marinho que já está flutuando.","Pela expansão da água aquecida e pela perda de gelo que está sobre continentes.","Porque o oceano passa a fabricar novas moléculas de água.","Apenas pelo aumento da quantidade de chuva."],
+    c:1,
+    e:"A água do oceano se expande ao aquecer, e o derretimento de geleiras e mantos de gelo continentais adiciona água ao mar."
+  },
+  {
+    q:"Qual alternativa representa principalmente uma ação de mitigação?",
+    a:["Criar rotas de evacuação para enchentes.","Instalar alertas para ondas de calor.","Elevar casas em áreas sujeitas a inundação.","Reduzir emissões e proteger ecossistemas que armazenam carbono."],
+    c:3,
+    e:"Mitigação atua nas causas do aquecimento, reduzindo emissões ou aumentando a remoção de carbono. As outras opções são principalmente adaptação."
+  },
+  {
+    q:"Um único dia muito frio prova que o aquecimento global não está acontecendo?",
+    a:["Sim, porque a temperatura diária define o clima global.","Sim, desde que aconteça durante o inverno.","Não. Um evento local e de curto prazo não anula uma tendência climática global de longo prazo.","Não, porque dias frios deixaram de existir."],
+    c:2,
+    e:"Tempo varia de um dia para outro. O aquecimento global é avaliado por tendências de longo prazo em dados de muitas regiões."
+  },
+  {
+    q:"Por que mitigação e adaptação são importantes juntas?",
+    a:["Porque uma reduz as causas do problema e a outra ajuda a diminuir riscos e danos dos impactos.","Porque as duas significam exatamente reduzir CO₂.","Porque adaptação elimina a necessidade de reduzir emissões.","Porque mitigação serve apenas para prever o tempo."],
+    c:0,
+    e:"Mitigação limita o agravamento futuro; adaptação ajuda sociedades e ecossistemas a lidar com impactos presentes e futuros."
+  }
+];
+
+let i=0, p=0, locked=false;
+const q=document.getElementById("question");
+const o=document.getElementById("options");
+const f=document.getElementById("feedback");
+const n=document.getElementById("next");
+const count=document.getElementById("count");
+const score=document.getElementById("score");
+const bar=document.getElementById("quizProgressBar");
+
+function render(){
+  locked=false;
+  count.textContent=`Pergunta ${i+1} de ${qs.length}`;
+  q.textContent=qs[i].q;
+  o.innerHTML="";
+  f.textContent="";
+  f.className="quiz-feedback";
+  n.style.display="none";
+  bar.style.width=`${(i/qs.length)*100}%`;
+  qs[i].a.forEach((x,j)=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.textContent=x;
+    b.onclick=()=>answer(b,j);
+    o.appendChild(b);
+  });
+}
+
+function answer(btn,j){
+  if(locked)return;
+  locked=true;
+  const buttons=[...o.querySelectorAll(".option")];
+  buttons.forEach(x=>x.disabled=true);
+  if(j===qs[i].c){
+    p++;
+    btn.classList.add("ok");
+    f.textContent="✅ Correto. "+qs[i].e;
+    f.classList.add("correct");
+  }else{
+    btn.classList.add("no");
+    buttons[qs[i].c].classList.add("ok");
+    f.textContent="❌ Não é essa. "+qs[i].e;
+    f.classList.add("wrong");
+  }
+  score.textContent=`${p} ${p===1?"ponto":"pontos"}`;
+  bar.style.width=`${((i+1)/qs.length)*100}%`;
+  n.style.display="inline-flex";
+  n.textContent=i===qs.length-1?"Ver resultado":"Próxima";
+}
+
+function finish(){
+  const pct=p/qs.length;
+  let msg = pct===1 ? "Perfeito! Você acertou todas. 🌟" :
+            pct>=.8 ? "Excelente resultado! 👏" :
+            pct>=.6 ? "Muito bom! Você entendeu os pontos principais. 🌱" :
+                      "Vale revisar algumas páginas e tentar de novo. 📚";
+  count.textContent="Resultado final";
+  q.textContent=`${p}/${qs.length}`;
+  o.innerHTML="";
+  f.textContent=msg;
+  f.className="quiz-feedback correct";
+  bar.style.width="100%";
+  n.textContent="↻ Refazer quiz";
+  n.style.display="inline-flex";
+  n.onclick=()=>location.reload();
+}
+
+n.onclick=()=>{
+  if(i<qs.length-1){ i++; render(); }
+  else finish();
+};
+render();
+</script>
+
+<nav class="page-switch" aria-label="Navegação entre páginas"><a class="back" href="solucoes.html">← Soluções</a><a class="forward" href="fontes.html">Fontes →</a></nav>
+<footer>
+<div class="wrap footer">
+  <div><strong>Feira de Cultura — Colégio Bernoulli</strong><div class="muted">Mudanças Climáticas</div></div>
+  <div class="badge"><strong>Grupo 3 • Turma 8º E</strong><br><span>Colégio Bernoulli</span></div>
+</div>
+<div class="wrap bottom">Grupo 3 • Turma 8º E • Feira de Cultura • Colégio Bernoulli</div>
+<div class="site-version">V31</div>
+</footer>
+<script src="script.js?v=31"></script>
+</body>
+</html>
